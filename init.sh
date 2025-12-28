@@ -25,4 +25,4 @@ fi
 
 cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DLLVM_TOOLCHAIN=ON \
     -DKernelVerificationBuild=OFF \
-    "$SCRIPT_PATH" "$@"
+    "$SCRIPT_PATH/seL4" "$@"
