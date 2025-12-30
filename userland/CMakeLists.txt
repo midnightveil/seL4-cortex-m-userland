@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16.0)
 
 project(userland C ASM)
 
-add_compile_options(-nostdlib -fno-common)
+add_compile_options(-nostdlib -fno-common -ggdb3)
 add_link_options(-static -nostdlib)
 
 add_subdirectory(roottask)
