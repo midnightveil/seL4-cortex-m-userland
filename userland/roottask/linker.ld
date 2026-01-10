@@ -13,4 +13,8 @@ SECTIONS
         KEEP(*(.text._start))
         *(.text)
     }
+
+    /DISCARD/ : {
+        *(.ARM.exidx)
+    }
 }

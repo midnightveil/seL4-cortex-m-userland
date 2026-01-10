@@ -6,8 +6,9 @@
 .type _start, %function
 
 _start:
-
-    bl main
+    @ capRegister (r4) contains the bootinfo frame
+    mov r0, r4
+    bl start
 @ if we return from main, loop infinitely
 _loop:
     b _loop
