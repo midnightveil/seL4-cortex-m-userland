@@ -5,7 +5,8 @@ static inline char hexchar(unsigned int v) {
     return v < 10 ? '0' + v : ('a' - 10) + v;
 }
 
-#define puts seL4_DebugPutString
+extern void plat_uart_init(void);
+extern void puts(const char *str);
 
 void puthex32(uint32_t val) {
     char buffer[8 + 3];
@@ -21,6 +22,10 @@ void puthex32(uint32_t val) {
 }
 
 void start(seL4_BootInfo *bootinfo) {
+    seL4_DebugPutString("hello (seL4_DebugPutString)\n");
+
+    plat_uart_init();
+
     puts("hello\n");
     puthex32((uint32_t)bootinfo);
 
