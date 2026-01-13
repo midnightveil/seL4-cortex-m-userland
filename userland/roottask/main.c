@@ -22,7 +22,9 @@ void puthex32(uint32_t val) {
 }
 
 void start(seL4_BootInfo *bootinfo) {
+#ifdef CONFIG_PRINTING
     seL4_DebugPutString("hello (seL4_DebugPutString)\n");
+#endif
 
     plat_uart_init();
 
