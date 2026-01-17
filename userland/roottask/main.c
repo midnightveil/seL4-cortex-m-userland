@@ -35,15 +35,9 @@ void start(seL4_BootInfo *bootinfo) {
     puts("\n  extraLen: "); puthex32(bootinfo->extraLen);
     puts("\n  nodeID: "); puthex32(bootinfo->nodeID);
     puts("\n  numNodes: "); puthex32(bootinfo->numNodes);
-    puts("\n  numIOPTLevels: "); puthex32(bootinfo->numIOPTLevels);
     puts("\n  ipcBuffer: "); puthex32((uint32_t)bootinfo->ipcBuffer);
 
     puts("\n  empty: "); puthex32(bootinfo->empty.start); puts(".."); puthex32(bootinfo->empty.end);
-    puts("\n  sharedFrames: "); puthex32(bootinfo->sharedFrames.start); puts(".."); puthex32(bootinfo->sharedFrames.end);
-    puts("\n  userImageFrames: "); puthex32(bootinfo->userImageFrames.start); puts(".."); puthex32(bootinfo->userImageFrames.end);
-    puts("\n  userImagePaging: "); puthex32(bootinfo->userImagePaging.start); puts(".."); puthex32(bootinfo->userImagePaging.end);
-    puts("\n  ioSpaceCaps: "); puthex32(bootinfo->ioSpaceCaps.start); puts(".."); puthex32(bootinfo->ioSpaceCaps.end);
-    puts("\n  extraBIPages: "); puthex32(bootinfo->extraBIPages.start); puts(".."); puthex32(bootinfo->extraBIPages.end);
 
     puts("\n  initThreadCNodeSizeBits: "); puthex32(bootinfo->initThreadCNodeSizeBits);
     puts("\n  initThreadDomain: "); puthex32(bootinfo->initThreadDomain);

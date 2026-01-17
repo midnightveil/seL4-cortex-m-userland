@@ -1,18 +1,41 @@
 MEMORY
 {
-    SRAM (rwx)  : ORIGIN = 0x20040000, LENGTH = 520K
+    FLASH (rx)  : ORIGIN = 0x1000ea54, LENGTH = 1M
+    SRAM (rwx)  : ORIGIN = 0x20040000, LENGTH = 100K
 }
 
 SECTIONS
 {
-    .initial_stack : {
-        . += 4096;
-    }
-
-    .text : {
+    .text : ALIGN(4) {
         KEEP(*(.text._start))
         *(.text)
-    }
+        *(.text.*)
+    } >FLASH
+
+    .rodata : ALIGN(4) {
+        *(.rodata) *(.rodata.*)
+    } >FLASH
+
+    .data : ALIGN(4) {
+        _sdata = .;
+        *(.data) *(.data.*)
+        _edata = .;
+    } >SRAM AT>FLASH
+
+    _sdata_load = LOADADDR(.data);
+
+    .bss (NOLOAD) : ALIGN(4) {
+        _sbss = .;
+
+        _stack_bottom = ALIGN(4);
+        . += 0x1000;
+        _stack_top = .;
+
+        *(.bss)
+        *(.bss.*)
+
+        _ebss = .;
+    } >SRAM
 
     /DISCARD/ : {
         *(.ARM.exidx)
