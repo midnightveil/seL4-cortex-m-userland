@@ -11,6 +11,7 @@ class UserlandSetupData32(ctypes.LittleEndianStructure):
     _fields_ = [
         ("magic", ctypes.c_char * 4),
         ("entrypoint", ctypes.c_uint32),
+        ("initial_sp", ctypes.c_uint32),
     ]
 
     def __str__(self):
@@ -31,6 +32,13 @@ def readelf(filename: str, *kinds: list[str]):
     return json.loads(readelf_proc.stdout)
 
 
+def find_symbol_address(filename: str, symbol_name: str) -> int:
+    matches = [
+        sym for sym in readelf(filename, "--symbols")[0]["Symbols"]
+        if sym["Symbol"]["Name"]["Name"] == symbol_name
+    ]
+    assert len(matches) == 1, "must have unique symbol name"
+    return matches[0]["Symbol"]["Value"]
 
 
 def main():
@@ -56,14 +64,12 @@ def main():
 
 
     entrypoint = readelf(args.roottask, "--headers")[0]["ElfHeader"]["Entry"]
-
-    symbols = [sym for sym in readelf(args.kernel, "--symbols")[0]["Symbols"] if sym["Symbol"]["Name"]["Name"] == "ki_userspace_start"]
-    assert(len(symbols) == 1)
-    ki_userspace_start = symbols[0]["Symbol"]["Value"]
+    stack_top = find_symbol_address(args.roottask, "_stack_top")
 
     setup_data = UserlandSetupData(
         magic=b"meL4",
         entrypoint=entrypoint,
+        initial_sp=stack_top,
     )
 
     # NOTE: This code relies upon the assumptions about the roottask linker.ld,
@@ -71,6 +77,7 @@ def main():
     # Mask off bit 0 / thumb bit
     load_start = entrypoint & ~0x1
 
+    ki_userspace_start = find_symbol_address(args.kernel, "ki_userspace_start")
     load_start_offset = load_start - ki_userspace_start
     assert load_start_offset >= len(bytes(setup_data))
 
