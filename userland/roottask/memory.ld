@@ -1,0 +1,5 @@
+MEMORY
+{
+    FLASH (rx)  : ORIGIN = 0x10010000, LENGTH = 1M
+    SRAM (rwx)  : ORIGIN = 0x20040000, LENGTH = 100K
+}
