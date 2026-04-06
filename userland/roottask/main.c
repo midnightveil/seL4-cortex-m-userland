@@ -56,4 +56,24 @@ void start(seL4_BootInfo *bootinfo) {
     }
 
     puts("\ndone\n");
+
+    seL4_Word CONTROL;
+    asm volatile("mrs %0, CONTROL" : "=r"(CONTROL) );
+    if (CONTROL & (1ULL << 2) /* FPCA */) {
+        puts("floating-point active\n");
+    } else {
+        puts("floating-point inactive\n");
+    }
+
+    if (CONTROL & (1ULL << 1) /* SPSEL */) {
+        puts("SP_process in use (good)\n");
+    } else {
+        puts("BAD!!! SP_main in use\n");
+    }
+
+    if (CONTROL & (1ULL << 0) /* nPRIV */) {
+        puts("thread is unprivileged (good)\n");
+    } else {
+        puts("BAD!!! thread is privileged\n");
+    }
 }
